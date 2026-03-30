@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+.history
+
+# Model weights (download via instructions in README)
+weights/
+
+# Keep resources/ for screenshots
+!resources/
+
+# Runtime outputs
+leaderboard/
+figures/
+
+# NAS / Synology metadata
+@eaDir/
+.nfs*
+
+# Claude Code
+.claude/
+
+# Misc
+*.log
+*.pt
+*.pth
+*.pkl
+*.zip
+*.mp4
+.gradio/
+.cache/
+cache/
+
+# Internal docs (not part of the open-source release)
+OGQ_*/
+*.docx
+IDEA.md
+README_DiffusionHub.md
+example_*.py
+core/pickscore_v1/
+
+# Keep resources/ for screenshots (override earlier exclusion)
+!resources/
+!resources/*

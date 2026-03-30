@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanghyun Jo's AI Image Quality Boost Battle</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/web/style.css?v=20260330e">
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <h1><a href="https://shjo-april.github.io/" target="_blank" class="header-link">Sanghyun Jo</a>'s AI Image Quality <span>Boost</span> Battle</h1>
+    <div class="gpu-badge" id="gpu-status">GPU: ...</div>
+</header>
+
+<!-- Main -->
+<div class="container">
+
+    <!-- ===== Landing Section ===== -->
+    <div id="landing-section">
+
+        <div class="hero">
+            <h2>Can your prompt make it stunning?</h2>
+            <p class="hero-sub">Upload any image, then craft the perfect editing prompt to maximize its visual quality score. No code, no tricks, just your words.</p>
+            <p class="hero-note">Built by <a href="https://shjo-april.github.io/" target="_blank">Sanghyun Jo</a> using open-source models: <strong>FLUX</strong> for image generation, <strong>ICEdit</strong> for prompt-based editing, <strong>HPSv3</strong> for visual quality scoring, and <strong>MOAT</strong> for content tagging.</p>
+        </div>
+
+        <!-- Leaderboard preview -->
+        <div class="leaderboard">
+            <h3>Leaderboard (Top 3)</h3>
+            <div class="lb-grid" id="lb-row">
+                <div class="lb-empty">No entries yet. Be the first!</div>
+            </div>
+        </div>
+
+        <!-- Name first, then upload -->
+        <div class="entry-box">
+            <div class="creator-input">
+                <input type="text" id="creator-name" placeholder="Enter your name to start (e.g. [GYN] Sanghyun Jo)" maxlength="20">
+            </div>
+            <div class="upload-area disabled" id="drop-zone">
+                <p>Enter your name above to unlock image upload</p>
+                <p class="hint">PNG, JPG, WEBP supported</p>
+                <input type="file" id="file-input" accept="image/*" disabled>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Workspace Section ===== -->
+    <div class="workspace" id="workspace">
+
+        <!-- Start banner -->
+        <div class="start-banner" id="start-banner"></div>
+
+        <div class="images-row">
+            <div class="image-card">
+                <img id="img-original" src="" alt="Original">
+                <div class="label">Original</div>
+                <div class="score-display" id="score-original">-</div>
+            </div>
+            <div class="image-card">
+                <img id="img-current" src="" alt="Edited">
+                <div class="label">Edited (<span id="current-turn-label">-</span>)</div>
+                <div class="score-display">
+                    <span id="score-current">-</span>
+                    <span class="delta" id="score-delta"></span>
+                </div>
+            </div>
+            <div class="score-card">
+                <div class="label">Best</div>
+                <div class="best-score" id="best-score">-</div>
+                <div class="best-gap" id="best-gap"></div>
+            </div>
+        </div>
+
+        <!-- Tags & Rating info -->
+        <div class="info-panel" id="info-panel"></div>
+
+        <div class="edit-row">
+            <input type="text" id="edit-prompt"
+                   placeholder='Describe how to make it more stunning...'>
+            <button class="btn-edit" id="edit-btn" disabled>Edit</button>
+            <button class="btn-reset" id="reset-btn">New Image</button>
+        </div>
+
+        <!-- Leaderboard in workspace -->
+        <div class="leaderboard">
+            <h3>Leaderboard (Top 3)</h3>
+            <div class="lb-grid" id="lb-row-ws"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading">
+    <div class="loading-box">
+        <div class="spinner"></div>
+        <p id="loading-title">Processing...</p>
+        <p class="prompt-echo" id="loading-prompt"></p>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    Powered by <a href="https://shjo-april.github.io/" target="_blank">Sanghyun Jo</a> · <a href="https://github.com/shjo-april/ai-image-enhancer-battle" target="_blank">GitHub</a>
+</footer>
+
+<script src="/web/app.js?v=20260330e"></script>
+</body>
+</html>
