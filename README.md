@@ -6,7 +6,7 @@ Upload any image, write a text prompt, and watch an AI edit your image in real t
 
 All models used in this project are open-source.
 
-![overview](./resources/overview.png)
+![overview](./resources/overview_v2.png)
 
 ## How It Works
 
@@ -75,7 +75,7 @@ pip install onnxruntime pandas huggingface_hub safetensors
 
 Download the weights archive from Google Drive and extract it into the project root:
 
-**[Download weights.zip using Google Drive](#)**
+**[Download weights.zip using Google Drive](https://drive.google.com/file/d/1_eQ_J6M5OZ6X9LMdao7J8qe9NVWC-H9q/view?usp=sharing)**
 
 After extraction, the structure should look like:
 

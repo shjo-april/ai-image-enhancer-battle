@@ -49,6 +49,7 @@ cache/
 
 # Internal docs (not part of the open-source release)
 OGQ_*/
+OGQ_SLACK.md
 *.docx
 IDEA.md
 README_DiffusionHub.md

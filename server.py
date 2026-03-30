@@ -10,7 +10,9 @@ import asyncio
 import base64
 import logging
 import glob
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+KST = timezone(timedelta(hours=9))
 
 from fastapi import FastAPI, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -166,7 +168,9 @@ gpu_pool = GPUPool(EDITOR_DEVICES)
 # ---------------------------------------------------------------------------
 
 def preprocess(image: Image.Image) -> Image.Image:
-    """Convert to RGB, resize shorter side to IMAGE_SIZE, center-crop to square."""
+    """Apply EXIF rotation, convert to RGB, resize shorter side to IMAGE_SIZE, center-crop to square."""
+    from PIL import ImageOps
+    image = ImageOps.exif_transpose(image)
     if image.mode == "RGBA":
         bg = Image.new("RGB", image.size, (255, 255, 255))
         bg.paste(image, mask=image.split()[3])
@@ -264,7 +268,7 @@ def _save_session_init(sid: str, creator: str, original: Image.Image, initial_sc
         "session_id": sid, "creator": creator,
         "initial_score": initial_score, "best_score": initial_score,
         "best_round": None, "gap": 0.0,
-        "created_at": datetime.now().isoformat(), "total_rounds": 0,
+        "created_at": datetime.now(KST).isoformat(), "total_rounds": 0,
     }
     with open(os.path.join(sdir, "session.json"), "w") as f:
         json.dump(meta, f, indent=2)
@@ -277,7 +281,7 @@ def _save_round(sid: str, round_num: int,
     edited.save(os.path.join(rdir, "edited.png"))
     with open(os.path.join(rdir, "info.json"), "w") as f:
         json.dump({"round": round_num, "prompt": prompt, "score": score,
-                    "delta": delta, "timestamp": datetime.now().isoformat()}, f, indent=2)
+                    "delta": delta, "timestamp": datetime.now(KST).isoformat()}, f, indent=2)
 
 
 def _update_session_best(sid: str, best_score: float, best_round: int,
@@ -287,7 +291,7 @@ def _update_session_best(sid: str, best_score: float, best_round: int,
     meta_path = os.path.join(sdir, "session.json")
     meta = json.load(open(meta_path)) if os.path.exists(meta_path) else {}
     meta.update({"best_score": best_score, "best_round": best_round, "gap": gap,
-                 "total_rounds": total_rounds, "updated_at": datetime.now().isoformat()})
+                 "total_rounds": total_rounds, "updated_at": datetime.now(KST).isoformat()})
     with open(meta_path, "w") as f:
         json.dump(meta, f, indent=2)
     _rebuild_ranking()
