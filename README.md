@@ -66,7 +66,7 @@ pip install transformers==4.48.3 accelerate==1.13.0 scikit-learn
 pip install einops==0.8.1 numpy==1.26.4 sanghyunjo orjson peft==0.18.1
 pip install sentencepiece==0.2.0 protobuf==5.27.2
 pip install fastapi uvicorn[standard] python-multipart
-pip install onnxruntime pandas huggingface_hub safetensors
+pip install onnxruntime pandas huggingface_hub safetensors pyngrok
 ```
 
 > `transformers==4.48.3` is required for compatibility with both HPSv3 and the Diffusers commit used by ICEdit.
@@ -119,6 +119,21 @@ To change the port:
 ```bash
 PORT=9123 python3 server.py
 ```
+
+### Public Access (ngrok tunnel)
+
+To share a public URL without port forwarding or firewall configuration:
+
+```bash
+# One-time setup: install pyngrok and set your ngrok auth token
+pip install pyngrok
+ngrok config add-authtoken YOUR_NGROK_TOKEN
+
+# Launch with public tunnel
+CUDA_VISIBLE_DEVICES=0,1 python3 server.py --tunnel
+```
+
+The public URL will be printed in the terminal (e.g., `https://xxxx-xxxx.ngrok-free.app`). Anyone with the link can access the battle. Free ngrok accounts allow one tunnel at a time.
 
 ## GPU Layout
 

@@ -506,10 +506,22 @@ async def index():
 app.mount("/web", StaticFiles(directory="web", html=False), name="web")
 
 if __name__ == "__main__":
+    import argparse
     import uvicorn
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--tunnel", action="store_true", help="Open a public ngrok tunnel")
+    args = parser.parse_args()
+
     port = int(os.environ.get("PORT", 7960))
     logger.info(f"Starting on 0.0.0.0:{port}")
     logger.info(f"CUDA_VISIBLE_DEVICES={VISIBLE_DEVICES} -> devices={DEVICE_IDS}")
     logger.info(f"Scorer: cuda:{SCORER_DEVICE}, Editors: cuda:{EDITOR_DEVICES}")
     logger.info(f"Leaderboard: {LEADERBOARD_DIR}")
+
+    if args.tunnel:
+        from pyngrok import ngrok
+        public_url = ngrok.connect(port, "http").public_url
+        logger.info(f"Public URL: {public_url}")
+
     uvicorn.run(app, host="0.0.0.0", port=port)
