@@ -105,7 +105,10 @@ export HF_TOKEN=hf_your_token_here
 ## Usage
 
 ```bash
-# First GPU = scorer, remaining GPUs = editors
+# Single GPU (H100-class, scorer + editor share the same device)
+CUDA_VISIBLE_DEVICES=0 python3 server.py
+
+# Multi GPU: first GPU = scorer, remaining GPUs = editors
 CUDA_VISIBLE_DEVICES=0,1 python3 server.py
 
 # More GPUs = more concurrent editors
@@ -138,6 +141,13 @@ The public URL will be printed in the terminal (e.g., `https://xxxx-xxxx.ngrok-f
 ## GPU Layout
 
 ```
+Single GPU (H100-class, ~80GB VRAM)
+CUDA_VISIBLE_DEVICES=0
+
+  cuda:0  ->  Scorer (HPSv3 + MOAT) + ICEdit instance #1
+  = 1 editing slot, scoring shares the same device
+
+Multi GPU
 CUDA_VISIBLE_DEVICES=0,1,2,3,4
 
   cuda:0  ->  Scorer (HPSv3 + MOAT)       shared, concurrent

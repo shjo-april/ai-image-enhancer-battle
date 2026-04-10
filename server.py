@@ -29,8 +29,13 @@ logger = logging.getLogger("boost-battle")
 
 VISIBLE_DEVICES = os.environ.get("CUDA_VISIBLE_DEVICES", "0")
 DEVICE_IDS = list(range(len(VISIBLE_DEVICES.split(","))))
-SCORER_DEVICE = DEVICE_IDS[0]       # First GPU for scoring models
-EDITOR_DEVICES = DEVICE_IDS[1:]     # Remaining GPUs for ICEdit instances
+SCORER_DEVICE = DEVICE_IDS[0]
+# Single-GPU mode: scorer and editor share the same device (requires H100-class VRAM)
+# Multi-GPU mode: first GPU = scorer, remaining = ICEdit instances
+if len(DEVICE_IDS) == 1:
+    EDITOR_DEVICES = [DEVICE_IDS[0]]
+else:
+    EDITOR_DEVICES = DEVICE_IDS[1:]
 
 IMAGE_SIZE = 512
 GPU_IDLE_TIMEOUT = 60               # Auto-release GPU lock after N seconds idle
@@ -82,9 +87,15 @@ def load_models():
         sys.modules["transformers.modeling_layers"] = _stub
 
     # Replace peft with MoE-LoRA-compatible local version
-    local_peft_src = os.path.abspath(
-        ("/mnt/nas5/" if shjo.linux() else "//192.168.100.192/Data/") + "peft_icedit/src"
-    )
+    # Path to local peft_icedit source (MoE-LoRA compatible fork)
+    # Override with PEFT_ICEDIT_SRC env var if installed elsewhere
+    default_peft_src = ("/mnt/nas5/" if shjo.linux() else "//192.168.100.192/Data/") + "peft_icedit/src"
+    local_peft_src = os.path.abspath(os.environ.get("PEFT_ICEDIT_SRC", default_peft_src))
+    if not os.path.isdir(local_peft_src):
+        raise RuntimeError(
+            f"peft_icedit not found at {local_peft_src}. "
+            f"Set PEFT_ICEDIT_SRC env var or place it at the default path."
+        )
     for k in list(sys.modules.keys()):
         if k.startswith("peft"):
             del sys.modules[k]
